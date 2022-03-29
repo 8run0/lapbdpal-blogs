@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: lapbdpal.xyz
+  description: Series of services for personal use
+
+servers:
+  - url: https://api.lapbdpal.xyz
+
+paths:
+  /blogs:
+    get:
+      description: Returns a list of blogs 
+      responses:
+        '200':
+          description: Successfully returned a list of blogs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  #  ----- Added line  --------------------------------
+                  $ref: '#/components/schemas/Blog'
+                  #  ---- /Added line  --------------------------------
+        '400':
+          #  ----- Added line  ----------------------------------------
+          $ref: '#/components/responses/400Error'
+          #  ---- /Added line  ----------------------------------------
+
+    post:
+      description: Lets a user post a new blog
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              #  ----- Added line  ------------------------------------
+              $ref: '#/components/schemas/Blog'
+              #  ---- /Added line  ------------------------------------
+      responses:
+        '200':
+          description: Successfully created a new blog
+        '400':
+          #  ----- Added line  ----------------------------------------
+          $ref: '#/components/responses/400Error'
+          #  ---- /Added line  ----------------------------------------    
+
+  /blogs/{username}:
+    get:
+      description: Obtain all public blog posts by the username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully returned an list of blogs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  #  ----- Added line  --------------------------------
+                  $ref: '#/components/schemas/Blog'
+                  #  ---- /Added line  --------------------------------
+        '400':
+          #  ----- Added line  ----------------------------------------
+          $ref: '#/components/responses/400Error'
+  /blogs/{id}:
+    get:
+      description: Obtain all public blog posts by the id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully returned an list of blogs
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  #  ----- Added line  --------------------------------
+                  $ref: '#/components/schemas/Blog'
+                  #  ---- /Added line  --------------------------------
+        '400':
+          #  ----- Added line  ----------------------------------------
+          $ref: '#/components/responses/400Error'
+          #  ---- /Added line  ----------------------------------------     
+    delete:
+      description: Delete blog post by the id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully returned an list of blogs
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  #  ----- Added line  --------------------------------
+                  $ref: '#/components/schemas/Blog'
+                  #  ---- /Added line  --------------------------------
+        '400':
+          #  ----- Added line  ----------------------------------------
+          $ref: '#/components/responses/400Error'
+          #  ---- /Added line  ----------------------------------------
+components:
+  schemas:
+    Blog:
+      type: object
+      required:
+        - username
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        created:
+          type: string
+        public: 
+          type: boolean
+  #  ----- Added lines  ----------------------------------------
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object 
+            properties:
+              message:
+                type: string
